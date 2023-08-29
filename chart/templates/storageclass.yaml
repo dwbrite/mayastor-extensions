@@ -1,9 +1,14 @@
+{{- if .Values.optionalStorageClass.enabled }}
+---
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: {{ .Release.Name }}-single-replica
-parameters:
-  repl: '1'
-  protocol: 'nvmf'
-  ioTimeout: '60'
+  name: {{ default (printf "%s-storage-class" .Release.Name) .Values.optionalStorageClass.name }}
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "{{ .Values.optionalStorageClass.isDefault | default "false" }}"
 provisioner: io.openebs.csi-mayastor
+parameters:
+  repl: '{{ .Values.optionalStorageClass.replicas | default "1" }}'
+  protocol: '{{ .Values.optionalStorageClass.protocol | default "nvmf" }}'
+  ioTimeout: '{{ .Values.optionalStorageClass.ioTimeout | default "60" }}'
+{{- end }}

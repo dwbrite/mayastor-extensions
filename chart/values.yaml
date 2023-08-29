@@ -12,8 +12,15 @@ image:
 # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
 # Note that if multi-arch images support 'kubernetes.io/arch: amd64'
 # should be removed and set 'nodeSelector' to empty '{}' as default value.
-nodeSelector:
-  kubernetes.io/arch: amd64
+nodeSelector: {}
+
+optionalStorageClass:
+  enabled: "true"
+  isDefault: "true"
+  name: "openebs-single-replica"
+  replicas: "1"
+  protocol: "nvmf"
+  ioTimeout: "60"
 
 base:
   # request timeout for rest & core agents
@@ -195,9 +202,7 @@ mayastor:
   # node selectors to designate mayastor nodes for diskpool creation
   # Note that if multi-arch images support 'kubernetes.io/arch: amd64'
   # should be removed.
-  nodeSelector:
-    openebs.io/engine: mayastor
-    kubernetes.io/arch: amd64
+  nodeSelector: {}
   resources:
     limits:
       # cpu limits for mayastor component
